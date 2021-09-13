@@ -1,0 +1,81 @@
+{
+    "orthology_20210913_svo1qpul": {
+      "mappings": {
+        "gene": {
+          "dynamic": "false",
+          "_meta": {
+            "build_date": "2021-09-13T17:47:54.220706",
+            "biothing_type": "gene",
+            "src": {
+              "orthologyAGR": {
+                "stats": {
+                  "orthologyAGR": 100430
+                },
+                "version": "2021-08"
+              }
+            },
+            "stats": {
+              "total": 100430
+            },
+            "build_version": "20210913"
+          },
+          "properties": {
+            "all": {
+              "type": "text"
+            },
+            "orthology_data": {
+              "properties": {
+                "algorithms": {
+                  "type": "text"
+                },
+                "algorithmsmatch": {
+                  "type": "integer"
+                },
+                "gene1id": {
+                  "type": "keyword",
+                  "normalizer": "keyword_lowercase_normalizer"
+                },
+                "gene1speciesname": {
+                  "type": "text"
+                },
+                "gene1speciestaxonid": {
+                  "type": "keyword",
+                  "normalizer": "keyword_lowercase_normalizer"
+                },
+                "gene1symbol": {
+                  "type": "keyword",
+                  "normalizer": "keyword_lowercase_normalizer"
+                },
+                "gene2id": {
+                  "type": "keyword",
+                  "normalizer": "keyword_lowercase_normalizer"
+                },
+                "gene2speciesname": {
+                  "type": "text"
+                },
+                "gene2speciestaxonid": {
+                  "type": "keyword",
+                  "normalizer": "keyword_lowercase_normalizer"
+                },
+                "gene2symbol": {
+                  "type": "keyword",
+                  "normalizer": "keyword_lowercase_normalizer"
+                },
+                "isbestrevscore": {
+                  "type": "keyword",
+                  "normalizer": "keyword_lowercase_normalizer"
+                },
+                "isbestscore": {
+                  "type": "keyword",
+                  "normalizer": "keyword_lowercase_normalizer"
+                },
+                "outofalgorithms": {
+                  "type": "integer"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
