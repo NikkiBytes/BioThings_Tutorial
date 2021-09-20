@@ -2,12 +2,11 @@
     "version": "0.2",
     "requires" : ["pandas"],
     "dumper" : {
-        "data_url" : "https://fms.alliancegenome.org/download/ORTHOLOGY-ALLIANCE_COMBINED.tsv.gz",
-        "uncompress" : true,
-        "release": "parser:setup_release"
+        "data_url" : "https://hmdb.ca/system/downloads/current/hmdb_proteins.zip",
+        "uncompress" : true
     },
     "uploader" : {
-        "parser" : "parser:load_orthology",
+        "parser" : "parser:load_hmdb_data",
         "on_duplicates" : "error"
         
     }
