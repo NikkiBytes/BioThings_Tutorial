@@ -2,9 +2,9 @@ import os
 import pandas as pd
 import numpy as np
 from lxml import etree as etree_lxml
-#from biothings import config
+from biothings import config
 from biothings.utils.dataload import dict_convert, dict_sweep
-#logging = config.logger
+logging = config.logger
 
 process_key = lambda k: k.replace(" ","_").lower()
 

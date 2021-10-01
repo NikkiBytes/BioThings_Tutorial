@@ -1,6 +1,6 @@
 {
     "version": "0.2",
-    "requires" : ["pandas", "bs4", "xml.etree.ElementTree"],
+    "requires" : ["pandas", "bs4", "lxml"],
     "dumper" : {
         "data_url" : ["https://hmdb.ca/system/downloads/current/hmdb_metabolites.zip",
         "https://hmdb.ca/system/downloads/current/hmdb_proteins.zip" ],
