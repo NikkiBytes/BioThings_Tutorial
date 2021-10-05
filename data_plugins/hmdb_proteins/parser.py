@@ -54,9 +54,33 @@ def load_hmdb_data(data_folder):
 
         })
 
-    #print(p)
 
     data_list=[] # final data holder 
+
+    def enter_subject(data, t):
+        # setup subject info       
+        #uniprot_id, uniprot_name, genbank_protein_id, hgnc_id, genbank_gene_id, and gene_name.        
+        uniprot_id = t.find("{http://www.hmdb.ca}uniprot_id")
+        uniprot_id = uniprot_id.text
+        data["subject"]["uniprot_id"]=uniprot_id
+
+        uniprot_name= t.find("{http://www.hmdb.ca}uniprot_name")
+        uniprot_name = uniprot_name.text
+        data["subject"]["uniprot_name"]=uniprot_name
+
+        genbank_protein_id= t.find("{http://www.hmdb.ca}genbank_protein_id")
+        data["subject"]["genbank_protein_id"]=genbank_protein_id.text
+
+        hgnc_id= t.find("{http://www.hmdb.ca}hgnc_id")
+        data["subject"]["hgnc_id"]=hgnc_id.text
+
+        genbank_gene_id=t.find("{http://www.hmdb.ca}genbank_gene_id")
+        data["subject"]["genbank_gene_id"]=genbank_gene_id.text
+
+        gene_name = t.find("{http://www.hmdb.ca}gene_name")
+        data["subject"]["gene_name"]=gene_name.text
+
+        return data;
 
     # iterate over the parsed tree
     for t in root[0].iter():
@@ -108,30 +132,9 @@ def load_hmdb_data(data_folder):
                                 data["object"]["chemspider_id"]=metabolite_dict[text]["chemspider_id"]
                                 data["object"]["chebi_id"]=metabolite_dict[text]["chebi_id"]
                                 data["object"]["pubchem_compound_id"]=metabolite_dict[text]["pubchem_compound_id"]
-                            
-                    # setup subject info       
-                    #uniprot_id, uniprot_name, genbank_protein_id, hgnc_id, genbank_gene_id, and gene_name.        
-                    uniprot_id = t.find("{http://www.hmdb.ca}uniprot_id")
-                    uniprot_id = uniprot_id.text
-                    data["subject"]["uniprot_id"]=uniprot_id
-                    
-                    uniprot_name= t.find("{http://www.hmdb.ca}uniprot_name")
-                    uniprot_name = uniprot_name.text
-                    data["subject"]["uniprot_name"]=uniprot_name
-                    
-                    genbank_protein_id= t.find("{http://www.hmdb.ca}genbank_protein_id")
-                    data["subject"]["genbank_protein_id"]=genbank_protein_id.text
-                    
-                    hgnc_id= t.find("{http://www.hmdb.ca}hgnc_id")
-                    data["subject"]["hgnc_id"]=hgnc_id.text
-                    
-                    genbank_gene_id=t.find("{http://www.hmdb.ca}genbank_gene_id")
-                    data["subject"]["genbank_gene_id"]=genbank_gene_id.text
-                    
-                    gene_name = t.find("{http://www.hmdb.ca}gene_name")
-                    data["subject"]["gene_name"]=gene_name.text
-            
 
+                    # Call enter_subject method to fill in subject data 
+                    data=enter_subject(data,t)  
                     data_list.append(data)
 
             # ---------- Metabolite associations without references ------------     
@@ -139,82 +142,36 @@ def load_hmdb_data(data_folder):
             for met_assc in t.findall("{http://www.hmdb.ca}metabolite_associations"):
                 for met_assc_ in met_assc.findall("{http://www.hmdb.ca}metabolite"):
                     for met_assc_id in met_assc_.findall("{http://www.hmdb.ca}accession"):
-                            
-                            # if the metabolite association was already present above (in metabolite_refereces)
-                            # we want to pass adding id to dict to avoid making a duplicate document 
-                            pass_assc=False # set bool check for duplicates
-
-                            # Check for duplicate in list, set pass_assc bool to True 
-                            for elem in data_list:
-                                if met_assc_id.text == elem['object']['accession']:
-                                    #print('yes ', accession)
-                                    pass_assc = True
-                                    
-                            # if bool is True pass making duplicate doc       
-                            if pass_assc==True: 
-                                pass
-                            else:
-                                print(pass_assc)
-                                data={"_id": _id+"_%s"%ct, 'pmid': None, 'subject':{}, 'object':{'accession': met_assc_id.text} }
-                                ct+=1
-                                data["object"]["kegg_id"]=metabolite_dict[met_assc_id.text]["kegg_id"]
-                                data["object"]["chemspider_id"]=metabolite_dict[met_assc_id.text]["chemspider_id"]
-                                data["object"]["chebi_id"]=metabolite_dict[met_assc_id.text]["chebi_id"]
-                                data["object"]["pubchem_compound_id"]=metabolite_dict[met_assc_id.text]["pubchem_compound_id"]
-
-                                for met_assc_name in met_assc_.findall("{http://www.hmdb.ca}name"):
-                                    data["object"]['name'] = met_assc_name.text
-
-                                
-
-                                #setup subject info       
-                                #uniprot_id, uniprot_name, genbank_protein_id, hgnc_id, genbank_gene_id, and gene_name.        
-                                uniprot_id = t.find("{http://www.hmdb.ca}uniprot_id")
-                                uniprot_id = uniprot_id.text
-                                data["subject"]["uniprot_id"]=uniprot_id
-                                
-                                uniprot_name= t.find("{http://www.hmdb.ca}uniprot_name")
-                                uniprot_name = uniprot_name.text
-                                data["subject"]["uniprot_name"]=uniprot_name
-                                
-                                genbank_protein_id= t.find("{http://www.hmdb.ca}genbank_protein_id")
-                                data["subject"]["genbank_protein_id"]=genbank_protein_id.text
-                                
-                                hgnc_id= t.find("{http://www.hmdb.ca}hgnc_id")
-                                data["subject"]["hgnc_id"]=hgnc_id.text
-                                
-                                genbank_gene_id=t.find("{http://www.hmdb.ca}genbank_gene_id")
-                                data["subject"]["genbank_gene_id"]=genbank_gene_id.text
-                                
-                                gene_name = t.find("{http://www.hmdb.ca}gene_name")
-                                data["subject"]["gene_name"]=gene_name.text
                         
-                                data_list.append(data)
+                        # if the metabolite association was already present above (in metabolite_refereces)
+                        # we want to pass adding id to dict to avoid making a duplicate document 
+                        pass_assc=False # set bool check for duplicates
 
-        
+                        # Check for duplicate in list, set pass_assc bool to True 
+                        
+                        for elem in data_list:
+                            if met_assc_id.text == elem['object']['accession']:                            
+                                pass_assc = True
+                                
+                        # if bool is True pass making duplicate doc       
+                        if pass_assc==True: 
+                            pass
+                        else:
+                            data={"_id": _id+"_%s"%ct, 'pmid': None, 'subject':{}, 'object':{'accession': met_assc_id.text} }
+                            ct+=1
+                            data["object"]["kegg_id"]=metabolite_dict[met_assc_id.text]["kegg_id"]
+                            data["object"]["chemspider_id"]=metabolite_dict[met_assc_id.text]["chemspider_id"]
+                            data["object"]["chebi_id"]=metabolite_dict[met_assc_id.text]["chebi_id"]
+                            data["object"]["pubchem_compound_id"]=metabolite_dict[met_assc_id.text]["pubchem_compound_id"]
 
+                            for met_assc_name in met_assc_.findall("{http://www.hmdb.ca}name"):
+                                data["object"]['name'] = met_assc_name.text
+
+                            # Call enter_subject method to fill in subject data 
+                            data=enter_subject(data,t)  
+                            data_list.append(data)        
 
     for doc_ in data_list:
         yield doc_
 
-    """
-    # read in the input file to a dataframe
-    #df=pd.read_xml(protein_file)
-      
-    # --- Clean Data --- 
-    # get columns with all null values
-    null_cols= list(df.loc[:, df.isna().all()].columns.values)
-    data=df.drop(null_cols,axis=1) # remove the null cols
-    
-
-
-
-
-
-    # --- Push Data ---
-    # loop through our data row and simply pass the row 
-    for index, row in data[:10].iterrows():
-        #print("\n ROW %s \n %s"%(index,row))  # check output
-        yield row"""
-        
-    
+   
